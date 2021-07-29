@@ -1,13 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./style.css";
 import SearchBox from "./components/SearchBox";
-import data from "../../data/users.json";
+import axios from "axios";
 import SearchResults from "./components/SearchResults";
 
 export default function Search() {
     const [isAtTop,setIsAtTop] = useState(false);
-    const [usersData,setUsersData] = useState(data);
+    const [usersData,setUsersData] = useState([]);
     const [results, setResults] = useState([]);
+
+    useEffect(()=>
+    {
+        const getUsers = async () =>
+            { 
+                try {
+                    //Request API con Fetch 
+                    //const response = await fetch("https://jsonplaceholder.typicode.com/users");
+                    //const data = await response.json();
+                    //Request API con axios
+                    const data = await axios.get("https://jsonplaceholder.typicode.com/users");
+                    
+                    
+                    setUsersData(data);
+                } catch (error) {
+                    console.error(error);
+            }
+                            
+            };
+        getUsers().catch(null);
+    },[]);
+
     const handleSearchClick = (searchText) => {
         const searchTextLower = searchText.toLowerCase();
         setIsAtTop(true);
